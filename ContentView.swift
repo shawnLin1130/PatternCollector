@@ -1,26 +1,6 @@
 import SwiftUI
 import SwiftData
 
-struct Pattern: Identifiable, Codable {
-    var id: UUID
-    var name: String
-    var imageData: Data?
-    var category: String
-    var tags: [String]
-    var notes: String
-    var createdAt: Date
-    
-    init(name: String = "", category: String = "默认", tags: [String] = [], notes: String = "") {
-        self.id = UUID()
-        self.name = name
-        self.imageData = nil
-        self.category = category
-        self.tags = tags
-        self.notes = notes
-        self.createdAt = Date()
-    }
-}
-
 @Model
 class PatternItem {
     var id: UUID
@@ -31,14 +11,20 @@ class PatternItem {
     var notes: String
     var createdAt: Date
     
-    init(pattern: Pattern) {
-        self.id = pattern.id
-        self.name = pattern.name
-        self.imageData = pattern.imageData
-        self.category = pattern.category
-        self.tags = pattern.tags
-        self.notes = pattern.notes
-        self.createdAt = pattern.createdAt
+    init(
+        name: String = "",
+        category: String = "默认",
+        tags: [String] = [],
+        notes: String = "",
+        imageData: Data? = nil
+    ) {
+        self.id = UUID()
+        self.name = name
+        self.category = category
+        self.tags = tags
+        self.notes = notes
+        self.imageData = imageData
+        self.createdAt = Date()
     }
 }
 
@@ -262,18 +248,14 @@ struct AddPatternView: View {
     func savePattern() {
         let tags = tagsText.split(separator: ",").map { String($0).trimmingCharacters(in: .whitespaces) }
         
-        let pattern = Pattern(
+        let item = PatternItem(
             name: name,
             category: category,
             tags: tags,
-            notes: notes
+            notes: notes,
+            imageData: selectedImage?.jpegData(compressionQuality: 0.8)
         )
         
-        if let image = selectedImage {
-            pattern.imageData = image.jpegData(compressionQuality: 0.8)
-        }
-        
-        let item = PatternItem(pattern: pattern)
         modelContext.insert(item)
         
         dismiss()
