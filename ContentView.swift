@@ -230,11 +230,22 @@ struct ContentView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarLeading) {
-                    NavigationLink {
-                        SettingsView()
-                    } label: {
-                        Image(systemName: "paintbrush.pointed.fill")
-                            .foregroundColor(CuteColors.lavender)
+                    HStack(spacing: 16) {
+                        // 手帐本入口
+                        NavigationLink {
+                            JournalListView()
+                        } label: {
+                            Image(systemName: "book.closed.fill")
+                                .foregroundColor(CuteColors.pink.opacity(0.8))
+                        }
+                        
+                        // 设置入口
+                        NavigationLink {
+                            SettingsView()
+                        } label: {
+                            Image(systemName: "paintbrush.pointed.fill")
+                                .foregroundColor(CuteColors.lavender)
+                        }
                     }
                 }
             }
